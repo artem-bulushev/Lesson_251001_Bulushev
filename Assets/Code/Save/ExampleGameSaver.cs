@@ -79,18 +79,18 @@ namespace Code
                 _characterController.Move((Vector3)_gameState.PlayerPosition - _playerTransform.position);
                 //_playerTransform.Translate((Vector3)_gameState.PlayerPosition);
                 //_playerTransform.transform.position = (Vector3)_gameState.PlayerPosition;
-                foreach (Transform child in _targetRoot)
-                {
-                    Destroy(child.gameObject);
-                }
+                //foreach (Transform child in _targetRoot)
+                //{
+                //    Destroy(child.gameObject);
+                //}
 
-                if (_gameState != null)
-                {
-                    for (int i = 0; i < _gameState.TargetCount; i++)
-                    {
-                        var target = Instantiate(_targetPrefab, (Vector3)_gameState.TargetPositions[i], Quaternion.identity, _targetRoot);
-                    }
-                }
+                //if (_gameState != null)
+                //{
+                //    for (int i = 0; i < _gameState.TargetCount; i++)
+                //    {
+                //        var target = Instantiate(_targetPrefab, (Vector3)_gameState.TargetPositions[i], Quaternion.identity, _targetRoot);
+                //    }
+                //}
             }
             DeleteSave();
         }
