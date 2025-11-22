@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Color = UnityEngine.Color;
 
 namespace Code
 {
@@ -15,8 +15,6 @@ namespace Code
         private List<Transform> _spawnPoints = new List<Transform>();
         private Dictionary<Transform, bool> _spawnedPoints = new Dictionary<Transform, bool>();
         private Transform _playerTransform;
-
-        //private Transform[] _spawnPoints;
 
         private void Awake()
         {
@@ -67,27 +65,12 @@ namespace Code
 
         private void CheckSpawnPoints()
         {
-            
-            // Создаем копию списка для безопасной итерации
             var pointsToCheck = new List<Transform>(_spawnPoints);
 
             foreach (var point in pointsToCheck)
             {
-                // Проверяем, не был ли объект уничтожен
-                if (point == null || !point.gameObject.activeInHierarchy)
-                {
-                    _spawnPoints.Remove(point);
-                    _spawnedPoints.Remove(point);
-                    continue;
-                }
-
                 if (_spawnOnlyOnce && _spawnedPoints.TryGetValue(point, out var hasSpawned) && hasSpawned)
                     continue;
-
-                //foreach (Transform child in _targetRoot)
-                //{
-                //    Destroy(child.gameObject);
-                //}
 
                 float distance = Vector3.Distance(_playerTransform.position, point.position);
                 if (distance <= _triggerRadius)
@@ -135,26 +118,5 @@ namespace Code
                 }
             }
         }
-
-        //private void Start()
-        //{
-        //    _spawnPoints = GetComponentsInChildren<Transform>();
-        //    Spawn();
-        //}
-
-        //private void Spawn()
-        //{
-        //    if (_spawnPoints.Length == 0) return;
-        //    if (_enemyPrefab == null) return;
-
-        //    foreach (var point in _spawnPoints)
-        //    {
-        //        if (point != transform) 
-        //        {
-        //            Instantiate(_enemyPrefab, point.position, Quaternion.identity);
-        //        }    
-        //    }
-        //    //var enemy = Instantiate(_enemyPrefab, _spawnPoints[_spawnPoints.Length]);
-        //}
     }
 }

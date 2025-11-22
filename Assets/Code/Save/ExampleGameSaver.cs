@@ -1,5 +1,3 @@
-using StarterAssets;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Code
@@ -10,27 +8,8 @@ namespace Code
         [SerializeField] private Transform _targetRoot;
         [SerializeField] private Transform _playerTransform;
         [SerializeField] private CharacterController _characterController;
-        //[SerializeField] private FirstPersonController _playerController;
 
         private GameState _gameState;
-
-        //private void Awake()
-        //{
-        //    LoadGame();
-        //}
-
-        private void Start()
-        {
-
-            //if (_gameState != null)
-            //{
-
-            //    for (int i = 0; i < _gameState.TargetCount; i++)
-            //    {
-            //        var target = Instantiate(_targetPrefab, (Vector3)_gameState.TargetPositions[i], Quaternion.identity, _targetRoot);
-            //    }
-            //}
-        }
 
         private void Update()
         {
@@ -51,8 +30,6 @@ namespace Code
         {
             Transform[] targets = _targetRoot.GetComponentsInChildren<Transform>();
             _gameState = new GameState(targets.Length);
-            //_gameState.PlayerPosition = _playerController.transform.position;
-            //_gameState.PlayerPosition = _playerTransform.transform.position;
             _gameState.TargetCount = targets.Length;
             for (int i = 0; i < targets.Length; i++)
             {
@@ -62,7 +39,6 @@ namespace Code
 
         public void SaveGame()
         {
-            //_gameState.PlayerRotation = _playerTransform.rotation;
             GetSaveData();
             _gameState.PlayerPosition = _playerTransform.position;
             string json = JsonUtility.ToJson(_gameState);
@@ -77,20 +53,6 @@ namespace Code
                 string json = PlayerPrefs.GetString("GameSave");
                 _gameState = JsonUtility.FromJson<GameState>(json);
                 _characterController.Move((Vector3)_gameState.PlayerPosition - _playerTransform.position);
-                //_playerTransform.Translate((Vector3)_gameState.PlayerPosition);
-                //_playerTransform.transform.position = (Vector3)_gameState.PlayerPosition;
-                //foreach (Transform child in _targetRoot)
-                //{
-                //    Destroy(child.gameObject);
-                //}
-
-                //if (_gameState != null)
-                //{
-                //    for (int i = 0; i < _gameState.TargetCount; i++)
-                //    {
-                //        var target = Instantiate(_targetPrefab, (Vector3)_gameState.TargetPositions[i], Quaternion.identity, _targetRoot);
-                //    }
-                //}
             }
             DeleteSave();
         }
