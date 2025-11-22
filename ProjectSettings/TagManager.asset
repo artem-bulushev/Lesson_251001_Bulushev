@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - ObjectSave
+  - Ground
   layers:
   - Default
   - TransparentFX
