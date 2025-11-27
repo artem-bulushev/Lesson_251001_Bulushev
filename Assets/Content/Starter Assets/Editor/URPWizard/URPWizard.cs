@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 #endif
 
-public class URPWizard : EditorWindow
+public class URPWizard : AssetPostprocessor
 {
     [InitializeOnLoadMethod]
     static void OnInitialize()
@@ -19,7 +19,7 @@ public class URPWizard : EditorWindow
     {
         if (GraphicsSettings.currentRenderPipeline != null) 
             return;
-
+        
         var request = Client.List();
         while (!request.IsCompleted) { }
 
@@ -34,10 +34,15 @@ public class URPWizard : EditorWindow
                     
             Client.Resolve();
         }
-        else
-        {
-            FindAndAssignPipeline();
-        }
+    }
+
+    static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
+        string[] movedFromAssetPaths)
+    {
+        if (GraphicsSettings.currentRenderPipeline != null) 
+            return;
+        
+        FindAndAssignPipeline();
     }
 
 #if USE_URP
@@ -47,23 +52,14 @@ public class URPWizard : EditorWindow
 
         if (existingPipelines.Length == 0)
         {
+            Debug.LogError($"Universal Render Pipeline Asset was not found.\n" +
+                           $"Please create one and assign under the Project Settings > Graphics > Scriptable Render Pipeline Settings.");
+
             return;
         }
         
         var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(AssetDatabase.GUIDToAssetPath(existingPipelines[0]));
         GraphicsSettings.defaultRenderPipeline = pipeline;
-    }
-    
-    class PipelineAssetProcessor : AssetPostprocessor
-    {
-        static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths, bool didDomainReload)
-        {
-            //if we have no pipeline set, we try to find one as one may have been imported
-            if (GraphicsSettings.currentRenderPipeline != null) 
-                return;
-            
-            FindAndAssignPipeline();
-        }
     }
 #else
     static void FindAndAssignPipeline(){}
